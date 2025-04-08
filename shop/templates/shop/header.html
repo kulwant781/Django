@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css"> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    
+
+    <!-- Load Popper.js before Bootstrap (needed for popovers) -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"></script>
+    
+    <!-- Load Bootstrap (Make sure it's not duplicated) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <title>{% block title %} {% endblock %}</title>
+  </head>
+  <body>
+
+<style>
+  /* Ensure carousel items are centered */
+  .carousel-item {
+    text-align: center;
+    width: 100%; /* Full width */
+}
+
+/* Ensure cards are properly aligned */
+.col-md-3 {
+    display: inline-block;
+    vertical-align: top;
+    width: 24%; /* Equal width for all cards */
+    padding: 10px;
+}
+
+/* Style for product images */
+.col-md-3 img {
+    width: 100%;
+    height: 240px; /* Fixed height for consistency */
+    object-fit: cover;
+}
+
+/* Styling the card */
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fff;
+}
+
+/* Text alignment inside cards */
+.card-body {
+    text-align: center;
+}
+
+/* Card title styling */
+.card-title {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Description text styling */
+.card-text {
+    font-size: 14px;
+    color: #666;
+}
+
+/* "Add to Cart" button styling */
+.cart {
+    width: 100%;
+    background-color: #009688;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.cart:hover {
+    background-color: #97abaa;
+}
+.cartview {
+    width: 35%;
+    background-color: #009688;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cartview:hover {
+    background-color: #97abaa;
+}
+.quickview {
+    width: 100%;
+    background-color: #97abaa;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.quickview:hover {
+    background-color: #009688;
+}
+.minus, .plus {
+    width: 15% !important;
+}
+
+/* Carousel navigation button styling */
+.carousel-control-prev, .carousel-control-next {
+    width: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: #009688;
+    border-radius: 50%;
+    padding: 10px;
+}
+
+/* Indicators styling */
+.carousel-indicators {
+    bottom: -20px;
+}
+
+.carousel-indicators li {
+    background-color: #009688;
+}
+
+/* Fix for spacing issues */
+body .no-padding {
+    padding-left: 0;
+    padding-right: 0;
+}
+.fa-star {
+    font-size: 20px;
+    color: gray;
+}
+.checked {
+    color: gold;
+}
+.cart_empty{
+    font-size: 20px;
+    color: red;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+</style>
+
+<!--  navigation bar code starts here-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/shop">My Awesome Cart</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/shop">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/shop/about-us">About Us</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/shop/contant-us">Contact Us</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/shop/about-us">Order Tracking</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/shop/product-View">Product View</a>
+            </li>
+           
+            
+        </ul>
+        <form action="/shop/search" method="GET" class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" name="query" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        <button id="popcart" data-html="true" class="btn btn-secondary" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="Bottom popover">
+            Cart(<span id="cartitem">0</span>)
+          </button>
+    </div>
+</nav>
+<!--nav bar code ends here-->
+
+<!--        carousel indicators starts from here-->
+
+{% block body %} 
+
+<input type="hidden" class="form-control" id="pro_id" name="pro_id" value="">
+<input type="hidden" class="total" name="total" value="">{% endblock %}
+
+<footer class="footer bg-dark text-white mt-5 p-3 text-center">
+    <div class="container">
+        <span class="text-muted">© 2020 My Awesome Cart</span>
+    </div>
+</footer>
+
+
+
+{% block js %} 
+<script>
+    if (localStorage.getItem('cart') == null) {
+        var cart = {};
+    } else {
+        cart = JSON.parse(localStorage.getItem('cart'));
+    }
+    console.log(cart);
+    var sum = 0;
+    // if ($.isEmptyObject(cart)) {
+    //     // If object is empty
+    //     mystr = "<p class='cart_empty'>Your cart is empty, please add some items before checking out ! </p>"
+    //     $('#items').append(mystr);
+    // }
+    
+    for (item in cart) {
+    
+        let name = cart[item][1];
+        let qty = cart[item][0];
+        sum = sum + qty;
+        // mystr = `        <li class="list-group-item d-flex justify-content-between align-items-center">
+        //                ${name}
+        //                 <span class="badge badge-primary badge-pill">${qty}</span>
+        //             </li>`
+        // $('#items').append(mystr);
+    }
+    document.getElementById('cartitem').innerHTML = sum;
+</script>
+
+{% endblock %}

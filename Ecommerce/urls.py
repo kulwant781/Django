@@ -16,14 +16,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-# from . import views
+from . import views
 import shop  # Import the shop module
 import blog  # Import the blog module
+from django.conf import settings
+from django.conf.urls.static import static
+from blog.admin import blog_admin_site
+from shop.admin import shop_admin_site
 
 urlpatterns = [
+    path('blog-admin/', blog_admin_site.urls),
+    path('shop-admin/', shop_admin_site.urls),
     path('admin/', admin.site.urls),
-    # path('', views.index, name='index'),  # Add a URL pattern for the home page
+    path('', views.index, name='index'),  # Add a URL pattern for the home page
     path('shop/', include('shop.urls')),  # Use include() to include the shop app's URLs
     path('blog/', include('blog.urls')),  # Use include() to include the blog app's URLs
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  # Add this line to serve media files in development
 

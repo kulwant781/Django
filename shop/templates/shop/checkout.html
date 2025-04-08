@@ -1,0 +1,300 @@
+{% extends 'shop/header.html' %}
+{% block title%} Checkout - My Awesome Cart{% endblock %}
+{% block body %}
+
+{% if thank %}
+    <script>
+    alert('Thanks for ordering with us. Your order is. Use it to track your order using our order tracker');
+    localStorage.clear();
+    document.location = "/shop";
+    </script>
+{% endif %}
+<div class="container">
+    <div class="col my-4">
+      
+        <div id="items">
+         
+            <ul class="list-group">
+             
+            </ul>
+            
+        </div>
+    </div>
+    <div class="col my-4">
+        <div id="items">
+            <ul class="list-group" style="text-align: right;">
+                <h4 id="total-price">Total Price: $0.00</h4>
+            </ul>
+    
+            <!-- Coupon Code Section -->
+            <div class="mt-3">
+                <input type="text" id="coupon-code" class="form-control" name="coupon-code" value="" placeholder="Enter Coupon Code" style="width: 300px; display: inline-block;">
+                <button class="btn btn-success mt-2" id="apply-coupon">Apply Coupon</button>
+                <p id="discount-message" class="text-success mt-2"></p>
+                <h4 id="final-price">Final Price: $0.00</h4>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col my-4">
+        <h2>Enter Address & Other Details:</h2>
+        <form method="POST" action="/shop/checkout/">
+            {% csrf_token %}
+            <input type="hidden" class="form-control" id="pro_id" name="pro_id" value="1">
+            <input type="hidden" class="total" name="amount" id="amount" value="{{ amount }}">   
+            <input type="hidden" class="form-control" id="itemsJson" name="itemsJson" value="">
+            <input type="hidden" class="form-control" id="couponcode" name="couponcode" value="">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputname">Name</label>
+                    <input type="name" class="form-control" id="inputname" placeholder="Name" name="name">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputEmail4">Email</label>
+                    <input type="email" class="form-control" id="inputEmail4" placeholder="Email" name="email">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputAddress">Address</label>
+                <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" name="address1">
+            </div>
+            <div class="form-group">
+                <label for="inputAddress2">Address line 2</label>
+                <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor" name="address2">
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputCity">City</label> 
+                    <input type="text" class="form-control" id="inputCity" name="city">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputState">State</label>
+                    <input type="text" class="form-control" id="inputAddress2" placeholder="Enter State" name="state">
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="inputZip">Zip</label>
+                    <input type="text" class="form-control" id="inputZip" name="zipcode" placeholder="Zipcode">
+                </div>
+            </div>
+            <div class="form-group">
+                    <label for="inputZip">Phone Number</label>
+                    <input type="tel" class="form-control" id="inputPhone" name="phone" placeholder="Phone Number">
+                </div>
+            <button type="submit" class="btn btn-primary">Place Order</button>
+        </form>
+    </div>
+
+    <div class="col my-4">
+        <h2>Card Deatils</h2>
+       
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputname">Name</label>
+                    <input type="namec" class="form-control" id="inputname" placeholder="Namecard">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputEmail4">Email</label>
+                    <input type="emailc" class="form-control" id="inputEmail4" placeholder="Email">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputAddress">Card Number</label>
+                <input type="Number" class="form-control" id="inputAddress" placeholder="4242 4242 4242 4242">
+            </div>
+            <div class="form-group">
+                <label for="inputAddress2">Month</label>
+                <input type="text" class="form-control" id="inputAddress2" placeholder="Month">
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputCity">Year</label>
+                    <input type="text" class="form-control" id="inputCity">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputState">Pin Number</label>
+                    <input type="text" class="form-control" id="inputAddress2" placeholder="Enter State">
+                </div>
+                
+            </div>
+            
+    </div>
+</div>
+{% endblock %}
+{%block js%}
+<script>
+
+
+if (localStorage.getItem('cart') == null) {
+    var cart = {};
+} else {
+    var cart = JSON.parse(localStorage.getItem('cart'));
+}
+console.log(cart);
+
+var sum = 0;
+var totalPrice = 0; // Declare totalPrice globally
+
+if ($.isEmptyObject(cart)) {
+    // If object is empty
+    let mystr = "<p class='cart_empty'>Your cart is empty, please add some items before checking out!</p>";
+    $('#items').append(mystr);
+}
+
+$(document).ready(function () {
+    if (typeof cart === 'undefined' || $.isEmptyObject(cart)) {
+        console.error("Cart is not defined or empty.");
+        return;
+    }
+
+    // Add Heading for Product List
+    $("#items").append(`
+        <h3 class="mb-3">Your Shopping Cart</h3>
+        <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold bg-light">
+                <span>Image</span>
+                <span>Product Name</span>
+                <span>Price</span>
+                <span>Discounted</span>
+                <span>Qty</span>
+                <span>Item Total</span>
+                
+            </li>
+        </ul>
+    `);
+
+    for (let item in cart) {
+        let qty = cart[item][0]; 
+        let pro_id = cart[item][2];
+
+        if (!pro_id || typeof pro_id !== "string") {
+            console.error("Invalid Product ID:", pro_id);
+            continue;
+        }
+
+        let idstr = pro_id.slice(2);
+        sum += qty; // Update sum with quantity
+        console.log("Sending ID:", idstr);
+        buyNow(idstr, qty); // Call buyNow function with ID and quantity
+    }
+
+    document.getElementById('cartitem').innerHTML = sum;
+
+    // Ensure localStorage values exist before calling buyNow
+    var product = localStorage.getItem('product');
+    var quantity = localStorage.getItem('quantity');
+
+    if (product && quantity) {
+        buyNow(product, quantity);
+    }
+});
+
+function buyNow(idstr, qty) {
+    $.ajax({
+        url: "/shop/checkout_ajax/",  // Django URL that handles the request
+        type: "POST",
+        data: {
+            "id": idstr,
+            "qty": qty,
+            "csrfmiddlewaretoken": $("input[name=csrfmiddlewaretoken]").val()
+        },
+        success: function (response) {
+            if (response.success) {
+                let data = response.allProds[0][0];
+                console.log("Data:", data);
+
+                // Calculate total price for this product
+                let itemTotal = qty * data.discount_price;
+                totalPrice += itemTotal;  // Accumulate total price
+                
+                console.log("Item Total Price:", itemTotal);
+                console.log("Updated Total Price:", totalPrice);
+
+                // Create Bootstrap Card for Product
+                let productCard = `
+                <li class="list-group-item d-flex justify-content-between align-items-center" id="cart-item-${data.id}">
+                    <img src='${data.image}' class="card-img-top" alt="${data.product_name}" style="width: 70px; height: 70px;">
+                    <span class="badge" style="font-size:15px; color:#000">${data.product_name}</span>
+                    <span class="badge badge-primary badge-pill" style="font-size:15px;"> ${data.price}</span>
+                    <span class="badge badge-success badge-pill" style="font-size:15px;"> ${data.discount_price}</span>
+                    <span class="badge badge-warning badge-pill" style="font-size:15px;"> ${qty}</span>
+                    <span class="badge badge-info badge-pill" style="font-size:15px;"> ${itemTotal.toFixed(2)}</span>
+                   
+                </li>`;
+
+                $('#items').append(productCard);
+
+                // Update the total price in the UI
+                $("#total-price").html(`<h4>Total Price: $${totalPrice.toFixed(2)}</h4>`);
+                $("#final-price").html(`<h4>Final Price: $${totalPrice.toFixed(2)}</h4>`);
+                $("#itemsJson").val(JSON.stringify(cart)); // Store cart items in hidden input field
+                var amount = $('#amount').val(totalPrice); // Get the total amount from the hidden input field
+                var couponCode = $('#coupon-code').val();
+                $('#couponcode').val(couponCode);
+            
+                //console.log("amount", amount);
+                
+            } else {
+                alert("Failed to add product.");
+            }
+        },
+        error: function (error) {
+            console.log("Error:", error);
+        }
+    });
+    // Update total price in the UI
+    
+}
+
+
+    // Apply coupon button click event
+    $("#apply-coupon").click(function () {
+        let couponCode = $("#coupon-code").val().trim();
+        let totalPrice = parseFloat($("#total-price").text().replace(/[^0-9.-]+/g, "")); // Extract total price
+        if (couponCode === "") {
+            alert("Please enter a coupon code.");
+            return;
+        }
+
+        // Send AJAX request to validate coupon
+        $.ajax({
+            url: "/shop/apply_coupon/",  // Django endpoint
+            type: "POST",
+            data: {
+                "coupon": couponCode,
+                "total_price": totalPrice,
+                "csrfmiddlewaretoken": $("input[name=csrfmiddlewaretoken]").val()
+            },
+            success: function (response) {
+                if (response.success) {
+                    let discountAmount = response.discount_amount;
+                    let finalPrice = response.final_price;
+
+                    $("#discount-message").text(`Coupon Applied! You saved $${discountAmount.toFixed(2)}`);
+                    $("#final-price").text(`Final Price: $${finalPrice.toFixed(2)}`);
+                    var couponCode = $('#coupon-code').val();
+                    $('#couponcode').val(couponCode);
+                    updateTotalPrice(finalPrice);
+                } else {
+                    $("#discount-message").text(response.message).addClass("text-danger");
+                }
+            },
+            error: function () {
+                alert("Error applying coupon.");
+            }
+        });
+    });
+
+    // Update total price when items are added
+function updateTotalPrice(newPrice) {
+    totalPrice = newPrice;
+
+    $("#total-price").text(`Total Price: $${totalPrice.toFixed(2)}`);
+    $("#final-price").text(`Final Price: $${totalPrice.toFixed(2)}`); // Default to total price
+    var amount = $('#amount').val(totalPrice); // Get the total amount from the hidden input field
+    console.log("amount", amount);
+}
+
+
+
+</script>
+{% endblock %}
