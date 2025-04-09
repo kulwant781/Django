@@ -86,33 +86,33 @@ WSGI_APPLICATION = 'Ecommerce.wsgi.application'
 # }
 
 # Database configuration for MySQL
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'kulwant_db',  # Correct database name
-        'HOST': '192.168.1.30',  # Correct host
-        'PORT': '3066',  # Correct port
-        'USER': 'kulwant_usr',  # Correct user
-        'PASSWORD': 'nDPXxrzJY2kiEZTT',  # Correct password
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        }
-    }
-}
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'shop_db',  # Your database name
-#         'USER': 'root',
-#         'PASSWORD': 'admin',
-#         'HOST': 'localhost',  # or your remote host IP
-#         'PORT': '3306',  # Default MySQL port
+#         'NAME': 'kulwant_db',  # Correct database name
+#         'HOST': '192.168.1.30',  # Correct host
+#         'PORT': '3066',  # Correct port
+#         'USER': 'kulwant_usr',  # Correct user
+#         'PASSWORD': 'nDPXxrzJY2kiEZTT',  # Correct password
 #         'OPTIONS': {
 #             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-#         },
+#         }
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'shop_db',  # Your database name
+        'USER': 'root',
+        'PASSWORD': 'admin',
+        'HOST': 'localhost',  # or your remote host IP
+        'PORT': '3306',  # Default MySQL port
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        },
+    }
+}
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
