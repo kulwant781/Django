@@ -114,13 +114,17 @@ WSGI_APPLICATION = 'Ecommerce.wsgi.application'
 #     }
 # }
 
+host = os.getenv('DB_HOST')
+if not host:
+    raise ValueError("DB_HOST environment variable is not set!")
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
+        'HOST': host,
         'PORT': '3306',
     }
 }
