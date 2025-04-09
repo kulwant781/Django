@@ -100,32 +100,17 @@ WSGI_APPLICATION = 'Ecommerce.wsgi.application'
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'shop_db',  # Your database name
-#         'USER': 'root',
-#         'PASSWORD': 'admin',
-#         'HOST': 'localhost',  # or your remote host IP
-#         'PORT': '3306',  # Default MySQL port
-#         'OPTIONS': {
-#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-#         },
-#     }
-# }
-
-host = os.getenv('DB_HOST')
-if not host:
-    raise ValueError("DB_HOST environment variable is not set!")
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': host,
-        'PORT': '3306',
+        'NAME': 'shop_db',  # Your database name
+        'USER': 'root',
+        'PASSWORD': 'admin',
+        'HOST': 'localhost',  # or your remote host IP
+        'PORT': '3306',  # Default MySQL port
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        },
     }
 }
 
