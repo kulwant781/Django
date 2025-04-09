@@ -28,7 +28,6 @@ MarkupSafe==3.0.2
 mysql-connector==2.2.9
 mysql-connector-python==9.1.0
 mysqlclient==2.2.7
-numpy==2.2.1
 pandas==2.2.3
 pdfkit==1.0.0
 phonenumbers==8.13.54
@@ -38,7 +37,6 @@ PyAudio==0.2.14
 PyMySQL==1.1.1
 pypdf==5.2.0
 PyPDF2==3.0.1
-pypiwin32==223
 python-dateutil==2.9.0.post0
 pyttsx3==2.98
 pytz==2024.2
